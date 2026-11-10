@@ -110,7 +110,7 @@ pub fn load_pattern(choice: u32) -> Grid {
 }
 
 // Number of live cells.
-pub fn population(_grid: &Grid) -> usize {
+pub fn population(grid: &Grid) -> usize {
     let mut count = 0;
     for row in grid {
 	for &cell in row {
@@ -126,17 +126,25 @@ pub fn population(_grid: &Grid) -> usize {
 // 2 block, 3 glider), ask how many generations, then print each generation with its
 // number and population, waiting for Enter between steps.
 pub fn play() {
-    let mut grid = new_grid();
-    grid[4][10] = true;
-    grid[5][10] = true;
-    grid[6][10] = true;
-    print_grid(&grid);
-    println!();
-    print_neighbor_counts(&grid);
-    println!();
-    let alive = grid[5][10];
-    let neighbors = count_neighbors(&grid, 5, 10);
-    println!("Center cell next generation: {}", if next_state(alive, neighbors) { "alive" } else { "dead" });
+    println!("1) Blinker  2) Block  3) Glider");
+    
+    let pattern_choice = crate::input::read_int("Which pattern? ", 1, 3);
+    let max_generations = crate::input::read_int("How many generations to run? ", 0, 100);
+
+    let mut grid = load_pattern(pattern_choice as u32);
+
+    for current_gen in 0..=max_generations {
+        println!("Generation {}, population {}", current_gen, population(&grid));
+        print_grid(&grid);
+
+        if current_gen < max_generations {
+            println!("Press Enter for the next generation.");
+            
+            std::io::stdin().read_line(&mut String::new()).unwrap();
+            
+            grid = next_generation(&grid);
+        }
+    }
 }
 
 #[cfg(test)]
