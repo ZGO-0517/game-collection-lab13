@@ -80,8 +80,33 @@ pub fn next_generation(grid: &Grid) -> Grid {
 //   1 = blinker: three cells in a row
 //   2 = block: a 2x2 square
 //   3 = glider: five cells
-pub fn load_pattern(_choice: u32) -> Grid {
-    todo!("Implement load_pattern")
+pub fn load_pattern(choice: u32) -> Grid {
+    let mut grid = new_grid();
+
+    match choice {
+	1 => {
+	    grid[4][10] = true;
+	    grid[5][10] = true;
+	    grid[6][10] = true;
+        }
+	2 => {
+	    grid[5][9] = true;
+	    grid[5][10] = true;
+	    grid[5][11] = true;
+	    grid[6][8] = true;
+	    grid[6][9] = true;
+	    grid[6][10] = true;
+	}
+	3 => {
+	    grid[4][10] = true;
+	    grid[5][11] = true;
+	    grid[6][9] = true;
+	    grid[6][10] = true;
+	    grid[6][11] = true;
+	}
+	_ => {}
+    }
+    grid
 }
 
 // Number of live cells.
